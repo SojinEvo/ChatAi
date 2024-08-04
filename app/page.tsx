@@ -19,7 +19,7 @@ import type { OpenAiRes } from "./ts/openAiApi";
 const ChatAi = () => {
 
   // 系统用户角色
-  const role = 'user';
+  const role = 'User';
 
   // 默认聊天
   const defaultChat = [
@@ -185,7 +185,7 @@ const ChatAi = () => {
   });
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth={false}>
       <Snackbar anchorOrigin={{ vertical, horizontal }}
         open={open}
         message={message}
