@@ -235,6 +235,7 @@ const ChatAi = () => {
         setChatState(false);
         setChatPause(false);
         prev[prev.length - 1] = {
+          ...prev[prev.length - 1],
           role: 'Chatbot',
           content: val,
         }
