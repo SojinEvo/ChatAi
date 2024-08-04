@@ -4,10 +4,11 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 
-import { Container, Box, TextField, IconButton, Snackbar } from '@mui/material';
+import { Container, Box, TextField, IconButton, Snackbar, Stack, Menu, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import PendingIcon from '@mui/icons-material/Pending';
+import TuneIcon from '@mui/icons-material/Tune';
 
 import Chat from './components/chat';
 
@@ -24,7 +25,7 @@ const ChatAi = () => {
   // 默认聊天
   const defaultChat = [
     {
-      role: 'ChatGPT',
+      role: 'Chatbot',
       content: '你好啊,我能帮你做什么吗?'
     }]
 
@@ -63,6 +64,22 @@ const ChatAi = () => {
   // 取消调用
   const [abortSignal, setAbortSignal] = useState(null);
 
+  // AI模式
+  const aiOptions = [
+    'QianWen',
+    'ChatGpt'
+  ];
+
+  // AI模式 转译
+  const aiDict = {
+    QianWen: '通义千问',
+    ChatGpt: 'ChatGPT'
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const openMenu = Boolean(anchorEl);
+
   useEffect(() => {
     // 取消调用当前接口
     if (chatStop && abortSignal) {
@@ -83,7 +100,7 @@ const ChatAi = () => {
     setChatState(true);
     setChatStop(false);
     setChat((prevChat) => {
-      const loadingChat = { role: 'ChatGPT', content: 'Loading...', loading: true, chatStop: false };
+      const loadingChat = { role: 'Chatbot', content: 'Loading...', loading: true, chatStop: false };
       if (reload) {
         if (prevChat.length === 1) return [...defaultChat]
         prevChat[prevChat.length - 1] = loadingChat;
@@ -99,15 +116,16 @@ const ChatAi = () => {
     const signal = abortController.signal;
     setAbortSignal(abortController);
     try {
-      const res: OpenAiRes = await chatApi(role, content, signal);
+      const res: OpenAiRes = await chatApi(role, content, signal, aiOptions[selectedIndex]);
       if (res) {
         const resContent = res.choices ? res.choices[0].message.content : res.message;
         setChat((prevChat) => {
           if (!prevChat[prevChat.length - 1].chatStop) {
             prevChat[prevChat.length - 1] = {
-              role: 'ChatGPT',
+              role: 'Chatbot',
               content: resContent,
               chatStop: false,
+              aiMode: aiDict[aiOptions[selectedIndex]]
             }
           }
           return [...prevChat];
@@ -136,7 +154,7 @@ const ChatAi = () => {
     setChatStop(true);
     setChat((prev) => {
       prev[prev.length - 1] = {
-        role: 'ChatGPT',
+        role: 'Chatbot',
         content: '已取消生成',
         chatStop: true
       }
@@ -145,6 +163,23 @@ const ChatAi = () => {
       ]
     });
   }
+
+  // AI模型切换 
+  const switchAI = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }
+
+  const handleMenuItemClick = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number,
+  ) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // 监听回车键
   const handleKeyDown = (event: { key: string; preventDefault: () => void; }) => {
@@ -173,6 +208,11 @@ const ChatAi = () => {
     ...publicIconStyle
   });
 
+  // AI模型切换图标样式
+  const SwitchAiIconBg = styled(TuneIcon)({
+    ...publicIconStyle,
+  });
+
   // 多文本框表单样式
   const CssTextField = styled(TextField)({
     '& div': {
@@ -195,7 +235,7 @@ const ChatAi = () => {
         setChatState(false);
         setChatPause(false);
         prev[prev.length - 1] = {
-          role: 'ChatGPT',
+          role: 'Chatbot',
           content: val,
         }
         return [
@@ -210,10 +250,47 @@ const ChatAi = () => {
         await chatAPiFun(role, curContent);
       }} onPause={(pauseState) => { setChatPause(pauseState); }} onChatState={(chatState) => { setChatState(chatState); }} />
       <Box className={'textFieldBox'}>
+        <Stack direction={'row'} alignItems={'center'}>
+          <div>
+            <IconButton id={'switch'} onClick={switchAI}
+              aria-haspopup="listbox"
+              aria-controls="lock-menu"
+              aria-label="when device is locked"
+              aria-expanded={openMenu ? 'true' : undefined}
+            >
+              <SwitchAiIconBg />
+            </IconButton>
+            <Menu
+              id="lock-menu"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'lock-button',
+                role: 'listbox',
+              }}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+            >
+              {aiOptions.map((option, index) => (
+                <MenuItem
+                  key={option}
+                  selected={index === selectedIndex}
+                  onClick={(event) => handleMenuItemClick(event, index)}
+                >
+                  {aiDict[option]} {selectedIndex === index ? '✅' : null}
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
+          <span style={{ color: "rgba(102, 102, 102, 1)" }} >{aiDict[aiOptions[selectedIndex]]}模式</span>
+        </Stack>
         <CssTextField
           fullWidth
           id="outlined-multiline-flexible"
-          label="Message ChatGPT... "
+          label="Message Chatbot... "
           InputLabelProps={{
             style: { textAlign: 'center' }
           }}
@@ -234,11 +311,11 @@ const ChatAi = () => {
                     </IconButton>
                 }
               </React.Fragment>
-            ),
+            )
           }}
         >
         </CssTextField>
-      </Box>
+      </Box >
     </Container >
   );
 }

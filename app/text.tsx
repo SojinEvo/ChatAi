@@ -37,7 +37,7 @@ function ChatInput() {
                 // autoFocus={true}
                 fullWidth
                 id="outlined-multiline-flexible"
-                label="Message ChatGPT... "
+                label="Message Chatbot... "
                 InputLabelProps={{
                     style: { textAlign: 'center' }
                 }}

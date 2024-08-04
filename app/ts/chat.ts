@@ -4,6 +4,7 @@ export interface ChatType {
     content: string; // 内容
     chatStop?: boolean; // 聊天是否结束
     loading?: boolean; // 加载中状态
+    aiMode?: string; // 聊天模式
 }
 
 // 弹窗信息
