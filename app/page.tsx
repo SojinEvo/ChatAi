@@ -221,7 +221,6 @@ const ChatAi = () => {
           maxRows={3}
           inputRef={inputRef}
           onKeyDownCapture={handleKeyDown}
-          autoFocus={chat.length > 1 ? true : false}
           InputProps={{
             endAdornment: (
               <React.Fragment>

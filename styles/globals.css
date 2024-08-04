@@ -8,25 +8,34 @@ html,body {
 
 .MuiContainer-root{
   padding: 0 !important;
+  overflow: hidden;
 }
 
 .textFieldBox {
-  max-width: 50rem;
+  max-width: 60vw;
   margin: 0 auto;
 }
 
 .contentBox {
   height: 80vh;
   overflow-y: auto;
-  margin: 0 auto;
   margin-top:3vh;
 }
 
 .contentBox .viewBox {
-  width: 50rem;
-  margin: 0 auto
+  max-width: 60vw;
+  margin: 0 auto;
 }
 
+@media screen and (max-width: 768px) {
+  .textFieldBox {
+    max-width: 80vw;
+  }
+  .contentBox .viewBox {
+    max-width: 80vw;
+    margin: 0 auto;
+  }
+}
 
 /*
  iphone14 Pro 兼容
@@ -34,6 +43,6 @@ html,body {
 
 @media only screen and (min-width:300px) and (max-width:600px) and (min-height:600px) and (max-height:900px) {
   .contentBox{
-    height: 70vh;
+    height: 73vh;
     }
 }

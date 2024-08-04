@@ -113,7 +113,7 @@ const Chat = (props: ChatProps) => {
     }
 
     return (
-        <Box className={'contentBox'} ref={boxShowRef} display="flex" flexDirection="column">
+        <Box className={'contentBox'} ref={boxShowRef}>
             <Box className={'viewBox'}>
                 {
                     chat.map((item, index) => {
