@@ -12,8 +12,8 @@ const API_CONFIG = {
     }
 }
 
-export const chatApi = (role: string, content: string, signal: AbortSignal, aiModel: string) => {
-    const { API_URL, AI_MODEL, API_KEY } = API_CONFIG[aiModel];
+export const chatApi = (role: string, content: string, signal: AbortSignal, aiMode: string) => {
+    const { API_URL, AI_MODEL, API_KEY } = API_CONFIG[aiMode];
     return fetch(API_URL, {
         method: "POST",
         headers: {
@@ -42,7 +42,10 @@ export const chatApi = (role: string, content: string, signal: AbortSignal, aiMo
             }
         }
         else {
-            throw new Error('Fetch failed' + res);
+            console.log('Fetch failed' + res);
+            return {
+                "message": "接口异常，请重新生成"
+            }
         }
     })
 }

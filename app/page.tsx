@@ -138,6 +138,7 @@ const ChatAi = () => {
     }
   }
 
+
   // 提交交互数据，更新聊天
   const subMit = async () => {
     const content = inputRef.current.value;
@@ -225,7 +226,7 @@ const ChatAi = () => {
   });
 
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={false} className="container">
       <Snackbar anchorOrigin={{ vertical, horizontal }}
         open={open}
         message={message}
