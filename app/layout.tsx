@@ -4,8 +4,10 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import '../styles/globals.css'
 
+import React from 'react'
+import ContextProvider from './context'
 
-const RootLayout = ({ children }) => {
+const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <html lang="en">
             <head>
@@ -14,9 +16,12 @@ const RootLayout = ({ children }) => {
                 <title>ChatAI</title>
             </head>
             <body>
-                {children}
+                <ContextProvider>
+                    {children}
+                </ContextProvider>
             </body>
         </html>
     )
 }
+
 export default RootLayout

@@ -117,7 +117,6 @@ const Chat = (props: ChatProps) => {
 
     // 暂停生成触发
     const pause = useCallback(() => {
-        console.log('00')
         onPause(true);
         onChatState(false);
     }, [onChatState, onPause])

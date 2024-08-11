@@ -1,7 +1,7 @@
 
 'use client'
 
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useRef, useEffect } from "react";
 
 import { Container, Box, TextField, IconButton, Snackbar, Stack, Menu, MenuItem } from '@mui/material';
@@ -17,10 +17,12 @@ import { chatApi } from "./api/openAi";
 import type { ChatType, MessageState } from './ts/chat';
 import type { OpenAiRes } from "./ts/openAiApi";
 
+import { AiKeysConfigContext } from "./context";
+
 const ChatAi = () => {
 
   // 系统用户角色
-  const role = 'User';
+  const role = 'user';
 
   // 默认聊天
   const defaultChat = [
@@ -80,12 +82,16 @@ const ChatAi = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const openMenu = Boolean(anchorEl);
 
+  const { aiKeysConfig } = useContext(AiKeysConfigContext);
+
+
   useEffect(() => {
     // 取消调用当前接口
     if (chatStop && abortSignal) {
       abortSignal.abort();
     }
   }, [chatStop, abortSignal]);
+
 
   // 弹窗消息
   const handleClick = (newState: Pick<MessageState, 'horizontal' | 'vertical' | 'message'>) => {
@@ -112,11 +118,13 @@ const ChatAi = () => {
 
   // 生成完成
   const chatAPiFun = async (role: string, content: string) => {
+    const index = aiKeysConfig.findIndex((item) => item.name === aiOptions[selectedIndex]);
+    const API_KEY = aiKeysConfig[index].value;
     const abortController = new AbortController();
     const signal = abortController.signal;
     setAbortSignal(abortController);
     try {
-      const res: OpenAiRes = await chatApi(role, content, signal, aiOptions[selectedIndex]);
+      const res: OpenAiRes = await chatApi(role, content, signal, aiOptions[selectedIndex], API_KEY);
       if (res) {
         const resContent = res.choices ? res.choices[0].message.content : res.message;
         setChat((prevChat) => {
