@@ -13,9 +13,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 The technology stack includes React,Typescript and Mui/material
 
-## Getting Started
+## Start Local Startup
 
-First, run the development server:
+1、create a .env.local file 
+```env.local
+MONGODB_URI='mongodb+srv://sojin:renchunjin@sojin.rg325rf.mongodb.net/'
+```
+
+2、run the development server:
 
 ```bash
 npm run dev
