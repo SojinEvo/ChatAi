@@ -35,7 +35,7 @@ const Config: React.FC = () => {
             const { name, value } = cur;
             return pre && pre.concat({ name, value })
         }, []);
-        const { message } = await FetchRequest('/api/setAiKey', 'POST', { data: resData });
+        const { message } = await FetchRequest('/api/setAiKeys', 'POST', { data: resData });
         console.log('message', message);
     }
     return (

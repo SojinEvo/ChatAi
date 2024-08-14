@@ -5,10 +5,11 @@
 // 请求参数：[{},{}]
 // 返回数据：{message}
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 
-export const POST = async (req) => {
+export const dynamic = "force-dynamic"; // 确保该路由始终动态生成
+export const POST = async (req: NextRequest) => {
     const body = await req.json();
     const { data } = body;
     if (!data) return NextResponse.json({ message: '缺少参数' }, { status: 403 })

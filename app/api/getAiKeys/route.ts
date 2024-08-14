@@ -1,14 +1,15 @@
 
 // 获取aiKey API (获得所有aiKey 或 指定name的apiKey)
 // 请求方式：GET
-// 请求地址：/getAiKey
+// 请求地址：/getAiKeys
 // 请求参数： null or name
 // 返回数据：[{ name: 'ChatGpt', value: 'sk-xxxxxx' }]
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 
-export const GET = async (req: { url: string | URL; }) => {
+export const dynamic = "force-dynamic"; // 确保该路由始终动态生成
+export const GET = async (req: NextRequest) => {
     const { searchParams } = new URL(req.url);
     const name = searchParams.get('name');
 
